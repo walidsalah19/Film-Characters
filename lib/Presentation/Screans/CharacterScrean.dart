@@ -8,6 +8,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:filmapp/Presentation/Widget/ToolBar.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 
 class CharacterScrean extends StatefulWidget {
   @override
@@ -19,7 +20,9 @@ class CharacterScreanState extends State {
   List<Results> search = [];
 
   String name = "press";
-
+  Widget _showLoadingDialog(BuildContext context) {
+   return Image.asset("assets/loading.gif");
+  }
   @override
   void initState() {
     // TODO: implement initState
@@ -35,21 +38,14 @@ class CharacterScreanState extends State {
     return BlocBuilder<CharactersCubit, CharactersState>(
         builder: (context, state) {
       if (state is CharactersLoaded) {
+        //SmartDialog.dismiss();
         results = state.results;
         return _buildScrollView();
       } else {
-        return Column(
+        //SmartDialog.showLoading();
+        return const Column(
           children: [
-            Container(
-              margin: const EdgeInsets.all(10),
-              child: const Text(
-                "No Data ",
-                textAlign: TextAlign.center,
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(color: Colors.orange, fontSize: 22),
-              ),
-            )
+
           ],
         );
       }
