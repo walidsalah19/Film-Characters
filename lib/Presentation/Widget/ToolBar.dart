@@ -5,11 +5,11 @@ import 'package:flutter/material.dart';
 
 class ToolBar
 {
-  static AppBar toolbar()
+  static AppBar toolbar( String? name)
   {
     return AppBar(
       backgroundColor:Colors.orange,
-      title: const Text('FilmApp',style: TextStyle(color: Colors.black,fontSize: 20)),
+      title:  Text(name!,style: TextStyle(color: Colors.black,fontSize: 20)),
     );
   }
 }

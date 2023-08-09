@@ -1,4 +1,5 @@
 import 'package:filmapp/Business/characters_cubit.dart';
+import 'package:filmapp/Data/Model/CharacterModel.dart';
 import 'package:filmapp/Data/Repo/CharacterRepo.dart';
 import 'package:filmapp/Data/Web_Services/CharacterApi.dart';
 import 'package:filmapp/Presentation/Screans/CharacterDetailsScrean.dart';
@@ -25,7 +26,8 @@ class AppRoutes {
                 create: (_) => cubit,
                 child: CharacterScrean()));
       case '/details':
-        return MaterialPageRoute(builder: (_) => CharacterDetailsScrean());
+        final Results cha=setting.arguments as Results;
+        return MaterialPageRoute(builder: (_) => CharacterDetailsScrean(cha));
     }
   }
 }

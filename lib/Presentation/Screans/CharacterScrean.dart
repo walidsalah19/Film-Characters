@@ -1,4 +1,5 @@
 import 'package:filmapp/Business/characters_cubit.dart';
+import 'package:filmapp/Constant/MyColors.dart';
 import 'package:filmapp/Data/Model/CharacterModel.dart';
 import 'package:filmapp/Data/Repo/CharacterRepo.dart';
 import 'package:filmapp/Data/Web_Services/CharacterApi.dart';
@@ -25,6 +26,10 @@ class CharacterScreanState extends State {
     super.initState();
     results = BlocProvider.of<CharactersCubit>(context).getAllCharacters();
   }
+
+/*  void _moveToDetails(Results character) {
+    Navigator.pushReplacementNamed(context, '/details', arguments: character);
+  }*/
 
   Widget _createBuilder() {
     return BlocBuilder<CharactersCubit, CharactersState>(
@@ -70,6 +75,13 @@ class CharacterScreanState extends State {
       shrinkWrap: true,
       physics: const ClampingScrollPhysics(),
       itemBuilder: (context, index) {
+      /*  return GestureDetector(
+            onTap: () {
+              _moveToDetails(results[index]);
+              print(results[index].name);
+            },
+            child: GridCharacterItem(
+                search.isEmpty ? results[index] : search[index]));*/
         return GridCharacterItem(
             search.isEmpty ? results[index] : search[index]);
       },
@@ -83,17 +95,26 @@ class CharacterScreanState extends State {
           _filterItems(value);
         } else {
           search.clear();
-          setState(() {
-
-          });
+          setState(() {});
         }
         print(value);
       },
       decoration: InputDecoration(
         prefixIcon: const Icon(Icons.search),
         hintText: 'Search..',
-        border: OutlineInputBorder(
+        enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(20.0),
+          borderSide:const BorderSide(
+            color: MyColors.myYellow,
+            width: 1
+          )
+        ),
+        focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(20.0),
+            borderSide:const BorderSide(
+                color: MyColors.myYellow,
+                width: 1
+            )
         ),
         contentPadding: const EdgeInsets.symmetric(horizontal: 16.0),
       ),
@@ -112,7 +133,7 @@ class CharacterScreanState extends State {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: ToolBar.toolbar(),
+        appBar: ToolBar.toolbar("Film App"),
         body: Column(
           children: [
             Padding(padding: EdgeInsets.all(16.0), child: _searchBar()),
