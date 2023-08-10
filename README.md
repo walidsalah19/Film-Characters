@@ -21,7 +21,7 @@ StateManagement(Bloc)
 
 Dio
 
-Rout
+Route
 
 # Demo
 <img width="200" alt="s1" src="https://github.com/walidsalah19/Film-Characters/assets/67799939/f9823909-1818-46fd-ae26-71fba32a2269">
