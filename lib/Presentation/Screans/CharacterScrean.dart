@@ -4,10 +4,12 @@ import 'package:filmapp/Data/Model/CharacterModel.dart';
 import 'package:filmapp/Data/Repo/CharacterRepo.dart';
 import 'package:filmapp/Data/Web_Services/CharacterApi.dart';
 import 'package:filmapp/Presentation/Widget/GridCharacteritem.dart';
+import 'package:filmapp/Presentation/Widget/ProgressDialog.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:filmapp/Presentation/Widget/ToolBar.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_offline/flutter_offline.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 
 class CharacterScrean extends StatefulWidget {
@@ -20,9 +22,11 @@ class CharacterScreanState extends State {
   List<Results> search = [];
 
   String name = "press";
+
   Widget _showLoadingDialog(BuildContext context) {
-   return Image.asset("assets/loading.gif");
+    return Image.asset("assets/loading.gif");
   }
+
   @override
   void initState() {
     // TODO: implement initState
@@ -42,11 +46,8 @@ class CharacterScreanState extends State {
         results = state.results;
         return _buildScrollView();
       } else {
-        //SmartDialog.showLoading();
-        return const Column(
-          children: [
-
-          ],
+        return Center(
+          child: _showLoadingDialog(context),
         );
       }
     });
@@ -71,7 +72,7 @@ class CharacterScreanState extends State {
       shrinkWrap: true,
       physics: const ClampingScrollPhysics(),
       itemBuilder: (context, index) {
-      /*  return GestureDetector(
+        /*  return GestureDetector(
             onTap: () {
               _moveToDetails(results[index]);
               print(results[index].name);
@@ -99,19 +100,11 @@ class CharacterScreanState extends State {
         prefixIcon: const Icon(Icons.search),
         hintText: 'Search..',
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(20.0),
-          borderSide:const BorderSide(
-            color: MyColors.myYellow,
-            width: 1
-          )
-        ),
+            borderRadius: BorderRadius.circular(20.0),
+            borderSide: const BorderSide(color: MyColors.myYellow, width: 1)),
         focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(20.0),
-            borderSide:const BorderSide(
-                color: MyColors.myYellow,
-                width: 1
-            )
-        ),
+            borderSide: const BorderSide(color: MyColors.myYellow, width: 1)),
         contentPadding: const EdgeInsets.symmetric(horizontal: 16.0),
       ),
     );
@@ -125,16 +118,44 @@ class CharacterScreanState extends State {
           .toList();
     });
   }
-
+  Widget _returnOfflinOrOnline(bool connected)
+  {
+    return Center(
+      child: connected
+          ? Column(
+        children: [
+          Padding(padding:const EdgeInsets.all(16.0), child: _searchBar()),
+          Expanded(child: _createBuilder())
+        ],
+      )
+          :Expanded(child:  Image.asset("assets/offline.gif",height: 300,width: 400,))
+    );
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: ToolBar.toolbar("Film App"),
-        body: Column(
+      appBar: ToolBar.toolbar("Film App"),
+      body: OfflineBuilder(
+        connectivityBuilder: (
+          BuildContext context,
+          ConnectivityResult connectivity,
+          Widget child,
+        ) {
+          final bool connected = connectivity != ConnectivityResult.none;
+          return _returnOfflinOrOnline( connected);
+        },
+        child:const Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+          ],
+        ),
+      ),
+      /* Column(
           children: [
             Padding(padding: EdgeInsets.all(16.0), child: _searchBar()),
             Expanded(child: _createBuilder())
           ],
-        ));
+        )*/
+    );
   }
 }
